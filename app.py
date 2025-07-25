@@ -1,9 +1,9 @@
-
 from flask import Flask, request
 import requests
 import json
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import os
 
 app = Flask(__name__)
 
@@ -16,7 +16,7 @@ data = sheet.get_all_values()
 
 # --- pomocnicza funkcja do wysyłki wiadomości ---
 def send_telegram_message(chat_id, text):
-    TOKEN = "TELEGRAM_TOKEN"  # Podmień na nazwę zmiennej środowiskowej jeśli chcesz
+    TOKEN = os.environ.get("TELEGRAM_TOKEN")
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     requests.post(url, json={"chat_id": chat_id, "text": text})
 
@@ -58,3 +58,8 @@ def webhook():
         send_telegram_message(chat_id, "❓ Nieznana komenda.")
 
     return "OK"
+
+# --- uruchomienie serwera Flask ---
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
