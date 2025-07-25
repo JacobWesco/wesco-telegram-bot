@@ -59,6 +59,11 @@ def webhook():
 
     return "OK"
 
+@app.route("/", methods=["GET"])
+def index():
+    return "Bot działa"
+
+
 # --- uruchomienie serwera Flask ---
 if __name__ == "__main__":
      import os
